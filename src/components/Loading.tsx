@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import Lottie from "lottie-react";
 
 
-
 export class SkeletonLoading extends Component {
   render() {
     return (
@@ -21,8 +20,8 @@ export class SkeletonLoading extends Component {
   }
 }
 
-export class LoadingAnimation extends Component {
-  render() {
-    return <Lottie animationData={MovieAnimation} loop={true} autoplay />;
-  }
-}
+// export class LoadingAnimation extends Component {
+//   render() {
+//     return <Lottie animationData={MovieAnimation} loop={true} autoplay />;
+//   }
+// }

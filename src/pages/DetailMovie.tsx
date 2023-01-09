@@ -1,76 +1,92 @@
-import React, { Component } from "react";
-import Layout from "../components/Layout";
+import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import moment from "moment";
+
 import { LoadingAnimation } from "../components/Loading";
+import Carousel from "../components/Carousel";
+import Layout from "../components/Layout";
+import { MovieType, VideosType } from "../utils/types/movie";
+import { useTitle } from "../utils/hooks/useTitle";
 
+const DetailMovie = () => {
+  const { id_movie } = useParams();
+  // const params = useParams();
+  const [data, setData] = useState<MovieType>({});
+  const [videos, setVideos] = useState<VideosType[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  useTitle(`${data.title}`)
 
-type GenreType = {
-  id?: number;
-  name?: string;
-}
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-interface DataType {
-  id?: number;
-  title?: string;
-  poster_path?: string;
-  overview?: string;
-  release_date?: string;
-  runtime?: number;
-  genres?: GenreType[];
-}
-
-interface PropsType {}
-
-interface StateType {
-  loading: boolean;
-  data: DataType;
-}
-
-export default class DetailMovie extends Component<PropsType, StateType> {
-  constructor(props: PropsType) {
-    super(props);
-    this.state = {
-      data: {},
-      loading: true,
-    };
-  }
-
-  componentDidMount() {
-    this.fetchData();
-  }
-
-  fetchData() {
+  function fetchData() {
     fetch(
-      `https://api.themoviedb.org/3/movie/?api_key=${import.meta.env.VITE_API_KEY}&language=en-US`, {method: "GET"}
+      `https://api.themoviedb.org/3/movie/${id_movie}?api_key=${
+        import.meta.env.VITE_API_KEY
+      }&language=en-US&append_to_response=videos`,
+      { method: "GET" }
     )
-      .then((response) => response.json()) //untuk konversi JSON
-      .then((data) => { // masuk ke then jika berhasil
-        this.setState({ data }); 
-        console.log(data);
+      .then((response) => response.json()) // untuk mengkonversi response menjadi json
+      .then((data) => {
+        // masuk ke then, apabila berhasil
+        setData(data);
+        setVideos(data.videos?.results);
       })
-      .catch((error) => { // catch apabila server gagal
+      .catch((error) => {
+        // masuk catch ketika server mengirimkan status tidak berhasil
         alert(error.toString());
       })
-      .finally(() => this.setState({ loading: false }));
+      .finally(() => setLoading(false));
   }
 
-  render() {
-    return (
-      <Layout>
-        {this.state.loading ? (
-            <LoadingAnimation />
-        ) : (
-            <div className="flex">
-                <img 
-                    src={`https://image.tmdb.org/t/p/w500 ${this.state.data.poster_path}`} 
-                    alt={this.state.data.title}
-                />
-                <p>Title: {this.state.data.title}</p>
-                <p>Overview: {this.state.data.overview}</p>
-                <p>Release Date: {this.state.data.release_date}</p>
-                <p>Runtime: {this.state.data.runtime}</p>
+  return (
+    <Layout>
+      {loading ? (
+        <LoadingAnimation />
+      ) : (
+        <>
+          {/*Fragment*/}
+          <div className="flex w-full h-[50vh] bg-gray-500">
+            <img
+              src={`https://image.tmdb.org/t/p/w500${data.poster_path}`}
+              alt={data.title}
+            />
+            <div className="p-5 w-full h-full">
+              <p>Title: {data.title}</p>
+              <p>
+                Release Date: {moment(data.release_date).format("DD MMMM YYYY")}
+              </p>
+              <p>Runtime: {data.runtime}</p>
+              <p>
+                Genre:{" "}
+                {data.genres
+                  ?.map((genre) => {
+                    return genre.name;
+                  })
+                  .join(", ")}
+              </p>
+              <p className="text-justify">Overview: {data.overview}</p>
             </div>
-        )}
-      </Layout>
-    );
-  }
-}
+          </div>
+          <Carousel
+            datas={videos.slice(0, 5)}
+            content={(data) => (
+              <iframe
+                width="100%"
+                height="315"
+                src={`https://www.youtube.com/embed/${data.key}`}
+                title={data.name}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                allowFullScreen
+              />
+            )}
+          />
+        </>
+      )}
+    </Layout>
+  );
+};
+
+
+export default DetailMovie;

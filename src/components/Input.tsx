@@ -1,23 +1,17 @@
-import React, { Component } from "react";
+import { Component } from "react";
 
-export class Input extends Component {
-  render() {
+export const Input = () => {
     return (
       <div className="mb-3">
         <input className="input input-bordered w-full" />
       </div>
     );
-  }
 }
 
-export class TextArea extends Component {
-  render() {
+export const TextArea = () => {
     return (
       <div className="mb-3">
         <textarea className="input input-bordered w-full" />
       </div>
     );
-  }
 }
-
-export default Input;
