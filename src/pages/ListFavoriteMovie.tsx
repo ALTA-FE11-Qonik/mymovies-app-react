@@ -1,28 +1,22 @@
-import { useState, useEffect, FC } from "react";
+import { useSelector } from "react-redux";
+// selector: mengambil, dispatch: merubah
+import { useDispatch } from "react-redux"; 
 
-import { SkeletonLoading } from "../components/Loading";
-import Layout from "../components/Layout";
-import Card from "../components/Card";
-import { MovieType } from "../utils/types/movie";
-import { useTitle } from "../utils/hooks/useTitle";
+import Layout from "components/Layout";
+import Card from "components/Card";
+
+import { setFavorites } from "utils/redux/reducer/reducer";
+import { MovieType } from "utils/types/movie";
+import { useTitle } from "utils/hooks/useTitle";
+import { RootState } from "utils/types/redux";
 
 
 const ListFavoriteMovie = () => {
+  const dispatch = useDispatch();
   useTitle("Cinephile - Favorite Movie");
-  const [datas, setDatas] = useState<MovieType[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+  const datas = useSelector((state: RootState) => state.data.favorites)
+  // mengambil datanya dg useSelector, tdk perlu useEffect.
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  function fetchData() {
-    const getListFavoriteMovie = localStorage.getItem("FavMovie");
-    if (getListFavoriteMovie) {
-      setDatas(JSON.parse(getListFavoriteMovie));
-    }
-    setLoading(false);
-  }
 
   function removeListFavoriteMovie(data: MovieType) {
     /*
@@ -32,16 +26,14 @@ const ListFavoriteMovie = () => {
     */
     let dupeDatas: MovieType[] = datas.slice();
     const filterData = dupeDatas.filter((item) => item.id !== data.id);
-    localStorage.setItem("FavMovie", JSON.stringify(filterData));
+    dispatch(setFavorites(filterData))
     alert(`Delete ${data.title} from favorite list`);
   }
 
   return (
     <Layout>
       <div className="grid grid-cols-4 gap-3 p-3">
-        {loading
-          ? [...Array(20).keys()].map((data) => <SkeletonLoading key={data} />)
-          : datas.map((data) => (
+        {datas.map((data) => (
               <Card
                 key={data.id}
                 title={data.title}

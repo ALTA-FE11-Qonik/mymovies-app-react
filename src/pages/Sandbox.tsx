@@ -1,13 +1,12 @@
 import { useState, useEffect  } from "react";
 import axios from "axios";
 
-import Layout from "../components/Layout";
-import Button from "../components/Button";
-import { useFetchGet } from "../utils/hooks/useTitle";
+import Layout from "components/Layout";
+import Button from "components/Button";
+import { useFetchGet } from "utils/hooks/useTitle";
 
 
 const Sandbox = () =>{
-    const [first, setFirst] = useState('test');
     const [trigger, setTrigger] = useState(false);
     const [data] = useFetchGet("https://jsonplaceholder.typicode.com/todos/1");
     // ketika ada perubahan state pada saat useEffect berjalan, maka terjadi sebuah re-render component
