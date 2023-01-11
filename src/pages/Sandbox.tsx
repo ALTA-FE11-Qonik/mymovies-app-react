@@ -35,7 +35,7 @@ const Sandbox = () =>{
     return(
         <Layout>
             <p>Test</p>
-            <Button label="BUTTON" onClick={() => funcTest()}/>
+            <Button label="BUTTON" />
         </Layout>
     )
 }

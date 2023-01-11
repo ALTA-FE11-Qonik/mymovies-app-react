@@ -41,9 +41,6 @@ const DetailMovie = () => {
 
   return (
     <Layout>
-      {loading ? (
-        <LoadingAnimation />
-      ) : (
         <>
           {/*Fragment*/}
           <div className="flex w-full h-[50vh] bg-gray-500">
@@ -82,7 +79,6 @@ const DetailMovie = () => {
             )}
           />
         </>
-      )}
     </Layout>
   );
 };
