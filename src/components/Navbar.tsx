@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
 import { useContext }  from "react";
 
-import Button from './Button';
+import Button from 'components/Button';
 
-import { ThemeContext } from '../utils/context';
+import { ThemeContext } from 'utils/context';
 
 const Navbar = () =>{
   const { theme, setTheme } = useContext(ThemeContext);
