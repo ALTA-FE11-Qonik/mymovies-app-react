@@ -2,10 +2,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 
-import Homepage from '../pages';
-import DetailMovie from "../pages/DetailMovie";
-import ListFavoriteMovie from "../pages/ListFavoriteMovie";
-import Sandbox from "../pages/Sandbox";
+import Homepage from 'pages';
+import DetailMovie from "pages/DetailMovie";
+import ListFavoriteMovie from "pages/ListFavoriteMovie";
+import Sandbox from "pages/Sandbox";
 
 import { ThemeContext } from "utils/context";
 import { setFavorites } from "utils/redux/reducer/reducer";
